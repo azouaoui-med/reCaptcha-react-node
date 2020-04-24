@@ -3,6 +3,8 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 
 const Recaptcha = () => {
+  const RECAPTCHA_SITE_KEY = 'Your client site key';
+
   const [captcha, setCaptcha] = useState('');
   const [registerStatus, setRegisterStatus] = useState('');
   const [registerResponse, setRegisterResponse] = useState('');
@@ -23,14 +25,12 @@ const Recaptcha = () => {
       };
       try {
         const { data } = await axios.post('/api/register', payload);
-        if (data.success) {
-          setRegisterStatus('success');
-        } else {
-          setRegisterStatus('error');
-        }
+
+        if (data.success) setRegisterStatus('success');
+        else setRegisterStatus('error');
+
         setRegisterResponse(data.message);
       } catch (error) {
-        console.log(error);
         setRegisterStatus('error');
         setRegisterResponse('Error while registering!');
       }
@@ -51,52 +51,26 @@ const Recaptcha = () => {
       }}
     >
       <div>
-        <h2 className='text-center'>Emplementing</h2>
-        <h4 className='mb-5 text-center'> google reCAPTCHA v2</h4>
+        <h2 className="text-center">Emplementing</h2>
+        <h4 className="mb-5 text-center"> google reCAPTCHA v2</h4>
         <form onSubmit={handleSubmit}>
-          <div className='form-group'>
-            <input
-              required
-              name='firstName'
-              type='text'
-              className='form-control'
-              placeholder='Enter first name'
-            />
+          <div className="form-group">
+            <input required name="firstName" type="text" className="form-control" placeholder="Enter first name" />
           </div>
-          <div className='form-group'>
-            <input
-              required
-              name='lastName'
-              type='text'
-              className='form-control'
-              placeholder='Enter last name'
-            />
+          <div className="form-group">
+            <input required name="lastName" type="text" className="form-control" placeholder="Enter last name" />
           </div>
-          <div className='form-group'>
-            <ReCAPTCHA
-              sitekey='Your client site key'
-              onChange={handleCaptchaChange}
-            />
+          <div className="form-group">
+            <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} onChange={handleCaptchaChange} />
           </div>
-          <div className='form-group'>
-            <button
-              type='submit'
-              className='btn btn-block btn-primary'
-              disabled={registerStatus === 'pending'}
-            >
+          <div className="form-group">
+            <button type="submit" className="btn btn-block btn-primary" disabled={registerStatus === 'pending'}>
               {registerStatus === 'pending' ? 'Submitting form ...' : 'Submit'}
             </button>
           </div>
-          <div className='form-group'>
+          <div className="form-group">
             {registerResponse !== '' ? (
-              <div
-                className={`alert ${
-                  registerStatus === 'success'
-                    ? 'alert-success'
-                    : 'alert-danger'
-                }`}
-                role='alert'
-              >
+              <div className={`alert ${registerStatus === 'success' ? 'alert-success' : 'alert-danger'}`} role="alert">
                 {registerResponse}
               </div>
             ) : null}
